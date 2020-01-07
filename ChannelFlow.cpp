@@ -10,12 +10,11 @@ int main() {
 	double h = 0.25;
 	int xPoints = xLength/h;
 	int yPoints = yLength/h;
-	//cout << xPoints << " " << yPoints;
 	double grid[xPoints][yPoints] = {};
 
 	// Rectagle Variables
-	//int xRectangle = 1;
-	//int yRectangle = 2;
+	int xRectangle = 1;
+	int yRectangle = 2;
 
 
 	/* IC */
@@ -30,28 +29,35 @@ int main() {
 		grid[i][yPoints-1] = 1;
 	}
 
-	/*
 
-	for (int i = 0; i < (xLength-xRectangle)/h; i++  ) {
-		grid[i][0] = 0;
+	/* computation */
+	for (int k =0 ; k < 100; k++) {	
+		for (int i = 1 ; i <xLength/h;i++) {
+			for (int j = 0;j < yLength/h; j++) {
+				//Inside the rectangle
+				if ((i*h) >= (xLength-xRectangle) && (j*h) <= (yRectangle)) {
+					continue;
+				}
+				// At the wall or 0 axis
+				if (j == 0 || j == yPoints-1) {
+					continue;
+				}
+
+				grid[i][j] = 0.25*(grid[i-1][j] + grid[i+1][j] + (1 + (h/(2*j*h)) )*grid[i][j-1] + (1 - (h/(2*j*h)) )*grid[i][j+1]); 
+			}
+		}
 	}
 
-	// Rectangle
-	for (int i = (xLength-xRectangle)/h; i<xLength/h; i++) {
-		for (int j = 0; j < (xRectangle/h); j++) {
-			grid[i][j] = 0; 
-		}
-	} 
-	*/
+
 
 	// Print grid
 	ofstream  myfile ("output.txt");
 	if (myfile.is_open()) {
 		for (int j = 0; j < yLength/h; j++ ) {
 			for (int i=0; i< xLength/h; i++) {
-				cout << grid[i][j] << " ";
+				myfile << grid[i][j] << "\t";
 			}
-			cout << "\n" ;
+			myfile << "\n" ;
 		}
 
 		myfile.close();
